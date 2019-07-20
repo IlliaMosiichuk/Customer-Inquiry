@@ -41,7 +41,7 @@ namespace Infrastructure.Data
             _dbSet.Update(entity);
         }
 
-        public IEnumerable<T> GetAll(Func<T, bool> predicate = null)
+        public virtual IEnumerable<T> GetAll(Func<T, bool> predicate = null)
         {
             if (predicate == null)
             {
@@ -51,7 +51,7 @@ namespace Infrastructure.Data
             return _dbSet.Where(predicate).ToList();
         }
 
-        public T GetById(long id)
+        public virtual T GetById(long id)
         {
             return _dbSet.Find(id);
         }

@@ -6,6 +6,7 @@ using ApplicationCore.Interfaces;
 using AutoMapper;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -29,11 +30,12 @@ namespace UnitTests
                 Email = email,
                 CustomerId = customerId,
             };
+            var loggerMock = new Mock<ILogger<CustomersController>>();
             var mapperMock = new Mock<IMapper>();
             var customerRepositoryMock = new Mock<ICustomerRepository>();
-            var controller = new CustomersController(customerRepositoryMock.Object, mapperMock.Object);
+            var controller = new CustomersController(customerRepositoryMock.Object, mapperMock.Object, loggerMock.Object);
 
-            var result = controller.Get(inquiry);
+            var result = controller.GetDetails(inquiry);
 
             Assert.IsInstanceOf<BadRequestObjectResult>(result);
         }
@@ -48,11 +50,12 @@ namespace UnitTests
                 Email = email,
                 CustomerId = customerId,
             };
+            var loggerMock = new Mock<ILogger<CustomersController>>();
             var mapperMock = new Mock<IMapper>();
             var customerRepositoryMock = new Mock<ICustomerRepository>();
-            var controller = new CustomersController(customerRepositoryMock.Object, mapperMock.Object);
+            var controller = new CustomersController(customerRepositoryMock.Object, mapperMock.Object, loggerMock.Object);
 
-            var result = controller.Get(inquiry);
+            var result = controller.GetDetails(inquiry);
 
             Assert.IsInstanceOf<NotFoundResult>(result);
         }
@@ -64,6 +67,7 @@ namespace UnitTests
             {
                 Email = testData.Customer.Email,
             };
+            var loggerMock = new Mock<ILogger<CustomersController>>();
             var mapperMock = new Mock<IMapper>();
             mapperMock.Setup(x => x.Map<CustomerViewModel>(testData.Customer))
                 .Returns(testData.CustomerViewModel).Verifiable();
@@ -72,9 +76,9 @@ namespace UnitTests
             customerRepositoryMock.Setup(x => x.GetByEmail(inquiry.Email))
                 .Returns(testData.Customer).Verifiable();
 
-            var controller = new CustomersController(customerRepositoryMock.Object, mapperMock.Object);
+            var controller = new CustomersController(customerRepositoryMock.Object, mapperMock.Object, loggerMock.Object);
 
-            var result = controller.Get(inquiry);
+            var result = controller.GetDetails(inquiry);
 
             var model = (result as OkObjectResult).Value as CustomerViewModel;
             mapperMock.Verify();
@@ -90,6 +94,7 @@ namespace UnitTests
             {
                 CustomerId = testData.Customer.Id,
             };
+            var loggerMock = new Mock<ILogger<CustomersController>>();
             var mapperMock = new Mock<IMapper>();
             mapperMock.Setup(x => x.Map<CustomerViewModel>(testData.Customer))
                 .Returns(testData.CustomerViewModel).Verifiable();
@@ -98,9 +103,9 @@ namespace UnitTests
             customerRepositoryMock.Setup(x => x.GetById(inquiry.CustomerId.Value))
                 .Returns(testData.Customer).Verifiable();
 
-            var controller = new CustomersController(customerRepositoryMock.Object, mapperMock.Object);
+            var controller = new CustomersController(customerRepositoryMock.Object, mapperMock.Object, loggerMock.Object);
 
-            var result = controller.Get(inquiry);
+            var result = controller.GetDetails(inquiry);
 
             var model = (result as OkObjectResult).Value as CustomerViewModel;
             mapperMock.Verify();
@@ -117,6 +122,9 @@ namespace UnitTests
                 Email = testData.Customer.Email,
                 CustomerId = testData.Customer.Id,
             };
+
+            var loggerMock = new Mock<ILogger<CustomersController>>();
+
             var mapperMock = new Mock<IMapper>();
             mapperMock.Setup(x => x.Map<CustomerViewModel>(testData.Customer))
                 .Returns(testData.CustomerViewModel).Verifiable();
@@ -125,9 +133,9 @@ namespace UnitTests
             customerRepositoryMock.Setup(x => x.GetByEmailAndId(inquiry.Email, inquiry.CustomerId.Value))
                 .Returns(testData.Customer).Verifiable();
 
-            var controller = new CustomersController(customerRepositoryMock.Object, mapperMock.Object);
+            var controller = new CustomersController(customerRepositoryMock.Object, mapperMock.Object, loggerMock.Object);
 
-            var result = controller.Get(inquiry);
+            var result = controller.GetDetails(inquiry);
 
             var model = (result as OkObjectResult).Value as CustomerViewModel;
             mapperMock.Verify();

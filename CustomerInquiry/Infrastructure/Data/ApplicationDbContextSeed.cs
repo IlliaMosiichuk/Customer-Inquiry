@@ -11,20 +11,12 @@ namespace Infrastructure.Data
     {
         public static void Seed(ApplicationDbContext dbContext)
         {
-            try
+            if (!dbContext.Customers.Any())
             {
-                if (!dbContext.Customers.Any())
-                {
-                    var testCustomers = GetTestCustomers();
-                    dbContext.Customers.AddRange(testCustomers);
-                    dbContext.SaveChanges();
-                }
+                var testCustomers = GetTestCustomers();
+                dbContext.Customers.AddRange(testCustomers);
+                dbContext.SaveChanges();
             }
-            catch (Exception ex)
-            {
-                //TODO: add logging
-            }
-            
         }
 
         private static IEnumerable<Customer> GetTestCustomers()

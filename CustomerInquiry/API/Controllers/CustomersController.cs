@@ -3,6 +3,7 @@ using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,18 +15,23 @@ namespace API.Controllers
     [ApiVersion("1.0")]
     public class CustomersController : BaseApiController
     {
+        private readonly ILogger<CustomersController> _logger;
         private readonly IMapper _mapper;
         private readonly ICustomerRepository _customerRepository;
 
-        public CustomersController(ICustomerRepository customerRepository, IMapper mapper)
+        public CustomersController(ICustomerRepository customerRepository, IMapper mapper,
+            ILogger<CustomersController> logger)
         {
             _customerRepository = customerRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
-        [HttpGet]
-        public IActionResult Get([FromQuery]InquiryViewModel inquiry)
+        [HttpGet("GetDetails")]
+        public IActionResult GetDetails([FromQuery]InquiryViewModel inquiry)
         {
+            _logger.LogInformation($"GetDetails() method was called with parameters: email: {inquiry.Email}, customerId: {inquiry.CustomerId}");
+
             var validationResult = inquiry.GetValidationResult();
             if (!validationResult.IsValid)
             {
@@ -33,9 +39,9 @@ namespace API.Controllers
             }
 
             Customer customer = null;
-            if (!string.IsNullOrEmpty(inquiry.Email))
+            if (!string.IsNullOrEmpty(inquiry.Email) && inquiry.CustomerId.HasValue)
             {
-                customer = _customerRepository.GetByEmail(inquiry.Email);
+                customer = _customerRepository.GetByEmailAndId(inquiry.Email, inquiry.CustomerId.Value);
             }
             else if (inquiry.CustomerId.HasValue)
             {
@@ -43,7 +49,7 @@ namespace API.Controllers
             }
             else
             {
-                customer = _customerRepository.GetByEmailAndId(inquiry.Email, inquiry.CustomerId.Value);
+                customer = _customerRepository.GetByEmail(inquiry.Email);
             }
 
             if (customer == null)
@@ -52,6 +58,16 @@ namespace API.Controllers
             }
 
             var model = _mapper.Map<CustomerViewModel>(customer);
+            return Ok(model);
+        }
+
+        [HttpGet("GetAll")]
+        public IActionResult GetAll()
+        {
+            var customers = _customerRepository.GetAll();
+
+            var model = _mapper.Map<List<CustomerViewModel>>(customers);
+
             return Ok(model);
         }
     }

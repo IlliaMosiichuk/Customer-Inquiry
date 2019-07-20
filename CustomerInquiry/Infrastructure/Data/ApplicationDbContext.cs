@@ -13,7 +13,6 @@ namespace Infrastructure.Data
             : base(options)
         {
             Database.EnsureCreated();
-            Database.Migrate();
         }
 
         public DbSet<Customer> Customers { get; set; }

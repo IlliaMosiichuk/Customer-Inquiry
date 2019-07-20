@@ -34,11 +34,18 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Testing")
+            {
+                ConfigureInMemoryDatabase(services);
+            }
+            else
+            {
+                ConfigureMSSQLDatabase(services);
+            }
+
             ConfigureVersioning(services);
             ConfigureSwagger(services);
 
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ApplicationDbContext>(c => c.UseSqlServer(connectionString));
             
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
@@ -69,6 +76,17 @@ namespace API
                     }
                 });
             app.UseMvc();
+        }
+
+        public void ConfigureMSSQLDatabase(IServiceCollection services)
+        {
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<ApplicationDbContext>(c => c.UseSqlServer(connectionString));
+        }
+
+        public void ConfigureInMemoryDatabase(IServiceCollection services)
+        {
+            services.AddDbContext<ApplicationDbContext>(c => c.UseInMemoryDatabase("CustomerInquiryDB"));
         }
 
         public void ConfigureVersioning(IServiceCollection services)
