@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+    [ApiVersion("1.0")]
     public class CustomersController : BaseApiController
     {
         private readonly IMapper _mapper;
