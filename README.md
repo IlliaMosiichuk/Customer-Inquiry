@@ -6,8 +6,9 @@ Features:
 - Swagger
 - API Versioning 
 - Logging (Serilog)
-- MS SQL database (Entity Framework)
-- In memory database (Entity Framework, for testing)
+- Entity Framework
+	- MS SQL database
+	- In memory database (for testing)
 - Unit Tests (NUnit, Mock)
 
 How to run:
