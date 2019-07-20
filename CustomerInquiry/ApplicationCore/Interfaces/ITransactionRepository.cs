@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ApplicationCore.Interfaces
 {
-    public interface ITransactionRepository : IAsyncRepository<Transaction>
+    public interface ITransactionRepository : IRepository<Transaction>
     {
     }
 }

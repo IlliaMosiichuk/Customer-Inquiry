@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ApplicationCore.Interfaces
 {
-    public interface ICustomerRepository : IAsyncRepository<Customer>
+    public interface ICustomerRepository : IRepository<Customer>
     {
     }
 }

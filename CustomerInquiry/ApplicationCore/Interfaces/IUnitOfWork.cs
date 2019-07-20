@@ -7,6 +7,9 @@ namespace ApplicationCore.Interfaces
 {
     public interface IUnitOfWork
     {
-        Task<int> CommitAsync();
+        ICustomerRepository Customers { get; }
+        ITransactionRepository Transactions { get; }
+
+        int Commit();
     }
 }
