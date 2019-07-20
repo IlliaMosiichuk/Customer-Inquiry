@@ -12,13 +12,7 @@ namespace Infrastructure.Data
         public EfUnitOfWork(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            Customers = new CustomerRepository(_dbContext);
-            Transactions = new TransactionRepository(_dbContext);
         }
-
-        public ICustomerRepository Customers { get; private set; }
-
-        public ITransactionRepository Transactions { get; private set; }
 
         public int Commit()
         {

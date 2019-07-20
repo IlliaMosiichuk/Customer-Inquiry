@@ -16,7 +16,7 @@ namespace ApplicationCore.Entities
 
         public string Email { get; set; }
 
-        public long Mobile { get; set; }
+        public string Mobile { get; set; }
 
         public List<Transaction> Transactions { get; set; }
     }

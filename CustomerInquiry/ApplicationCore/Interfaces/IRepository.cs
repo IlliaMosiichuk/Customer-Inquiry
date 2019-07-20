@@ -10,7 +10,7 @@ namespace ApplicationCore.Interfaces
     {
         T GetById(long id);
 
-        IEnumerable<T> GetAll();
+        IEnumerable<T> GetAll(Func<T, bool> predicate = null);
 
         void Add(T entity);
 

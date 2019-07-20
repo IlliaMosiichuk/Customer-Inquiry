@@ -12,5 +12,10 @@ namespace Infrastructure.Data
             : base(dbContext)
         {
         }
+
+        public Customer GetByEmail(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -7,9 +7,6 @@ namespace ApplicationCore.Interfaces
 {
     public interface IUnitOfWork
     {
-        ICustomerRepository Customers { get; }
-        ITransactionRepository Transactions { get; }
-
         int Commit();
     }
 }

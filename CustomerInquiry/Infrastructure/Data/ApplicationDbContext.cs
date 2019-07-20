@@ -12,6 +12,8 @@ namespace Infrastructure.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            Database.EnsureCreated();
+            Database.Migrate();
         }
 
         public DbSet<Customer> Customers { get; set; }
@@ -32,10 +34,21 @@ namespace Infrastructure.Data
             builder.Property(c => c.Email)
                 .HasMaxLength(25)
                 .IsRequired();
+
+            builder.Property(c => c.Mobile)
+                .HasMaxLength(10)
+                .IsRequired();
+
+            builder.Property(c => c.Name)
+                .HasMaxLength(25)
+                .IsRequired();
         }
 
         private void ConfigureTransaction(EntityTypeBuilder<Transaction> builder)
         {
+            builder.Property(c => c.Date)
+                .IsRequired();
+
             builder.Property(t => t.Currency)
                 .HasMaxLength(3)
                 .IsRequired();

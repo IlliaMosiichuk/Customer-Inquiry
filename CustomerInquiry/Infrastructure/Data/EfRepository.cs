@@ -41,9 +41,14 @@ namespace Infrastructure.Data
             _dbSet.Update(entity);
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(Func<T, bool> predicate = null)
         {
-            return _dbSet.ToList();
+            if (predicate == null)
+            {
+                return _dbSet.ToList();
+            }
+
+            return _dbSet.Where(predicate).ToList();
         }
 
         public T GetById(long id)
