@@ -2,6 +2,7 @@
 using ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Infrastructure.Data
@@ -15,7 +16,14 @@ namespace Infrastructure.Data
 
         public Customer GetByEmail(string email)
         {
-            throw new NotImplementedException();
+            return GetAll(c => c.Email.ToLower() == email.ToLower())
+                .FirstOrDefault();
+        }
+
+        public Customer GetByEmailAndId(string email, long id)
+        {
+            return GetAll(c => c.Email.ToLower() == email.ToLower() && c.Id == id)
+                .FirstOrDefault();
         }
     }
 }

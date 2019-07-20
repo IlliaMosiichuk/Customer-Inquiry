@@ -14,13 +14,10 @@ namespace API.Controllers
     public class CustomersController : BaseApiController
     {
         private readonly IMapper _mapper;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly ICustomerRepository _customerRepository;
 
-        public CustomersController(IUnitOfWork unitOfWork, ICustomerRepository customerRepository,
-            IMapper mapper)
+        public CustomersController(ICustomerRepository customerRepository, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
             _customerRepository = customerRepository;
             _mapper = mapper;
         }
@@ -45,7 +42,7 @@ namespace API.Controllers
             }
             else
             {
-                customer = _customerRepository.GetAll(c => c.Id == inquiry.CustomerId.Value && c.Email == inquiry.Email).FirstOrDefault();
+                customer = _customerRepository.GetByEmailAndId(inquiry.Email, inquiry.CustomerId.Value);
             }
 
             if (customer == null)
